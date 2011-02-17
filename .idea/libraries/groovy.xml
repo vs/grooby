@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="groovy">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/groovy/groovy-1.7.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy/commons-cli-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy/asm-3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy/antlr-2.7.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/groovy/src.zip!/src/test-resources/stubgenerator/propertyUsageFromJava" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy/src.zip!/src/tck/src" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy/src.zip!/src/examples" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy/src.zip!/src/main" />
+    </SOURCES>
+  </library>
+</component>
