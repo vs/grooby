@@ -33,15 +33,30 @@ class EsAstTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     void fetchTransformationInfo(AnnotatedNode node) {
-        for (AnnotationNode annotationNode: node.getAnnotations(new ClassNode(ExecuteString))) {
-            Expression memberExpression = annotationNode.getMember('value')
-            commandClass = memberExpression ? memberExpression.type.getTypeClass() : EsExecutableCommand
+        for (AnnotationNode annotationNode : node.getAnnotations(new ClassNode(ExecuteString))) {
+            Expression commandClassExpression = annotationNode.getMember('value')
+            Class commandClass
+            if (commandClassExpression != null) {
+                assert commandClassExpression instanceof ClassExpression
+                assert commandClassExpression.type?.name != null
+                try {
+                    commandClass = Class.forName(commandClassExpression.type?.name)
+                } catch (ClassNotFoundException cnfe) {
+                    throw new RuntimeException("Failed to load command class $commandClassExpression.type?.name specified at $sourceUnit.name")
+                }
+            } else {
+                commandClass = EsExecutableCommand
+            }
             assert commandClass.isEnum()
-
-            ConstantExpression directoryMappingExpression = annotationNode.getMember('directoryMapping')
+            assert IEsExecutableCommand.isAssignableFrom(commandClass)
+            this.commandClass = (Class<? extends IEsExecutableCommand>) commandClass
+            
+            Expression directoryMappingExpression = annotationNode.getMember('directoryMapping')
+            assert !directoryMappingExpression || directoryMappingExpression instanceof ConstantExpression
             directoryMappingProperty = directoryMappingExpression?.value
 
-            ConstantExpression loggerExpression = annotationNode.getMember('logger')
+            Expression loggerExpression = annotationNode.getMember('logger')
+            assert !loggerExpression || loggerExpression instanceof ConstantExpression
             loggerProperty = loggerExpression?.value
         }
     }
@@ -95,7 +110,7 @@ class EsAstTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     Expression transformConstantExpression(ConstantExpression expression) {
-        String prefix = extractWorkDirPrefix(expression.value)
+        String prefix = extractWorkDirPrefix((String) expression.value)
         String commandCandidate
         String workDirName
         if (prefix != null) {
