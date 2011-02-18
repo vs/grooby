@@ -12,7 +12,7 @@ class InsertMethodIdTransformationTest extends GroovyTestCase {
   void testTransformation() {
     String input =
     """
-package org.tmatesoft.translator.spec.cache
+package org.tmatesoft.grooby.cache
 
 @InsertMethodHash(applyToMethodsWith = MockUpTarget, doNotIncludeToHash = [MockUpSkip])
 class MockUpClass {

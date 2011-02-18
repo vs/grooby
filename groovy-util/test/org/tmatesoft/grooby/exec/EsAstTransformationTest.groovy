@@ -18,7 +18,7 @@ class EsAstTransformationTest {
         def output = "This is valid output"
         def args = ["valid arguments", "go", "here!", output]
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(EsTestExecutableCommand)
     class Temp {
@@ -49,7 +49,7 @@ class EsAstTransformationTest {
         argsMap['/and/last/path'] = output
         def args = argsMap.entrySet().toArray(new Map.Entry[argsMap.size()])
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(EsTestExecutableCommand)
     class Temp {
@@ -88,7 +88,7 @@ class EsAstTransformationTest {
         argsMap["label4"] = output
         def args = argsMap.entrySet().toArray(new Map.Entry[argsMap.size()])
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(value = EsTestExecutableCommand, directoryMapping = "sandbox")
     class Temp {
@@ -117,7 +117,7 @@ class EsAstTransformationTest {
         def output = "This is valid output"
         def args = ["valid arguments", "go", "here!", output]
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     class Temp {
       def call() {
@@ -144,7 +144,7 @@ class EsAstTransformationTest {
         def output = "This is valid output"
         def args = ["valid arguments", "go", "here!", output]
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(EsTestExecutableCommand)
     class Temp {
@@ -177,7 +177,7 @@ class EsAstTransformationTest {
         argsMap['/and/last/path'] = output
         def args = argsMap.entrySet().toArray(new Map.Entry[argsMap.size()])
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(EsTestExecutableCommand)
     class Temp {
@@ -214,7 +214,7 @@ class EsAstTransformationTest {
         argsMap["label4"] = output
         def args = argsMap.entrySet().toArray(new Map.Entry[argsMap.size()])
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(value = EsTestExecutableCommand, directoryMapping = "sandbox")
     class Temp {
@@ -245,7 +245,7 @@ class EsAstTransformationTest {
         def output = "This is valid output"
         def args = ["valid arguments", "go", "here!", output]
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(EsTestExecutableCommand)
     class Temp {
@@ -272,7 +272,7 @@ class EsAstTransformationTest {
         def output = "This is valid output"
         def args = [output]
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(EsTestExecutableCommand)
     class Temp {
@@ -291,7 +291,7 @@ class EsAstTransformationTest {
         def output = "Some text \'with quotes\'"
         def args = [output]
         def input = """
-    package org.tmatesoft.translator.spec.exec
+    package org.tmatesoft.grooby.exec
 
     @ExecuteString(EsTestExecutableCommand)
     class Temp {
