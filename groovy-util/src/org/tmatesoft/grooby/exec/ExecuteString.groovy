@@ -10,9 +10,9 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
 @Target([ElementType.TYPE, ElementType.METHOD])
 @GroovyASTTransformationClass(classes = [EsAstTransformation.class])
 public @interface ExecuteString {
-  Class<? extends IEsExecutableCommand> value() default EsExecutableCommand.class
+    Class<? extends IEsExecutableCommand> value() default EsExecutableCommand.class
 
-  String directoryMapping() default ''
+    String directoryMapping() default ''
 
-  String logger() default ''
+    String logger() default ''
 }

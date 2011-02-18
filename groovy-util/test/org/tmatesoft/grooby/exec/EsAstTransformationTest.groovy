@@ -43,7 +43,7 @@ class EsAstTransformationTest {
     public void testWordDirConstantCommandAnnotatedClass() {
         def output = "This is valid output"
         Map argsMap = [:]
-        argsMap['/some/path']= "valid arguments"
+        argsMap['/some/path'] = "valid arguments"
         argsMap['/another/path'] = "go"
         argsMap['/one/more/path'] = "here!"
         argsMap['/and/last/path'] = output
@@ -166,7 +166,7 @@ class EsAstTransformationTest {
     """
         assertValidOutput(input, output, args, false)
     }
-    
+
     @Test
     public void testWorkDirGStringCommandAnnotatedClass() {
         def output = "This is valid output"

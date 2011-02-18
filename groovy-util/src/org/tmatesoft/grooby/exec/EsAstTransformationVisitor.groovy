@@ -1,10 +1,11 @@
 package org.tmatesoft.grooby.exec
 
-import java.util.regex.*
+import java.util.regex.Pattern
+import org.codehaus.groovy.ast.stmt.ExpressionStatement
+import org.codehaus.groovy.ast.stmt.ReturnStatement
+import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.ast.*
 import org.codehaus.groovy.ast.expr.*
-import org.codehaus.groovy.ast.stmt.*
-import org.codehaus.groovy.control.*
 
 class EsAstTransformationVisitor extends ClassCodeVisitorSupport {
 
@@ -32,7 +33,7 @@ class EsAstTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     void fetchTransformationInfo(AnnotatedNode node) {
-        for (AnnotationNode annotationNode : node.getAnnotations(new ClassNode(ExecuteString))) {
+        for (AnnotationNode annotationNode: node.getAnnotations(new ClassNode(ExecuteString))) {
             Expression memberExpression = annotationNode.getMember('value')
             commandClass = memberExpression ? memberExpression.type.getTypeClass() : EsExecutableCommand
             assert commandClass.isEnum()
@@ -80,7 +81,7 @@ class EsAstTransformationVisitor extends ClassCodeVisitorSupport {
             update transformedExpression
         }
     }
-    
+
     Expression transform(Expression expression) {
         switch (expression.class) {
             case ConstantExpression.class:
@@ -206,7 +207,7 @@ class EsAstTransformationVisitor extends ClassCodeVisitorSupport {
 
         commandString = removeLeadingColon(commandString)
         commandString = removeLeadingWhitespace(commandString)
-        
+
         List<ConstantExpression> strings = gStringExpression.strings.subList(1, gStringExpression.strings.size())
         strings[0] = new ConstantExpression(commandString)
         List<Expression> values = gStringExpression.values.subList(1, gStringExpression.values.size())

@@ -1,17 +1,17 @@
 package org.tmatesoft.grooby.cache
 
-import java.lang.reflect.*
-import org.codehaus.groovy.control.*
-import org.codehaus.groovy.tools.ast.*
-import org.junit.*
-import org.tmatesoft.grooby.exec.*
+import java.lang.reflect.Method
+import org.codehaus.groovy.control.CompilePhase
+import org.codehaus.groovy.tools.ast.TestHarnessClassLoader
+import org.junit.Test
+import org.tmatesoft.grooby.exec.EsAstTransformation
 
 class InsertMethodIdTransformationTest extends GroovyTestCase {
 
-  @Test
-  void testTransformation() {
-    String input =
-    """
+    @Test
+    void testTransformation() {
+        String input =
+        """
 package org.tmatesoft.grooby.cache
 
 @InsertMethodHash(applyToMethodsWith = MockUpTarget, doNotIncludeToHash = [MockUpSkip])
@@ -83,45 +83,45 @@ class MockUpClass {
 }
         """
 
-    Map methodSymbols = [:]
-    methodSymbols['method0'] = '0'
-    methodSymbols['method0Skip'] = '0'
-    methodSymbols['method0Annotated'] = '0.annotated'
-    methodSymbols['method1'] = '1'
-    methodSymbols['method1Skip'] = '1'
-    methodSymbols['method1Annotated'] = '1.annotated'
-    methodSymbols['method2'] = '2'
-    methodSymbols['method2Skip'] = '2'
-    methodSymbols['method2Annotated'] = '2.annotated'
+        Map methodSymbols = [:]
+        methodSymbols['method0'] = '0'
+        methodSymbols['method0Skip'] = '0'
+        methodSymbols['method0Annotated'] = '0.annotated'
+        methodSymbols['method1'] = '1'
+        methodSymbols['method1Skip'] = '1'
+        methodSymbols['method1Annotated'] = '1.annotated'
+        methodSymbols['method2'] = '2'
+        methodSymbols['method2Skip'] = '2'
+        methodSymbols['method2Annotated'] = '2.annotated'
 
-    assertValidMethodIds(input, methodSymbols)
-  }
-
-  void assertValidMethodIds(String input, Map<String, String> methodSymbols) {
-    TestHarnessClassLoader loader = new TestHarnessClassLoader(new EsAstTransformation(), CompilePhase.SEMANTIC_ANALYSIS)
-    def clazz = loader.parseClass(input)
-    for (Method method: clazz.methods) {
-      MethodHash methodHash = method.getAnnotation(MethodHash)
-      String hash = methodHash?.value()
-      String symbol = methodSymbols[method.name]
-      assertTrue((hash != null && symbol != null) || (hash == null && symbol == null))
-      if (hash == null) {
-        continue
-      }
-
-      for (Method m: clazz.methods) {
-        MethodHash mh = m.getAnnotation(MethodHash)
-        String h = mh?.value()
-        String s = methodSymbols[m.name]
-
-        if (hash.equals(h)) {
-          assertEquals(symbol, s)
-        }
-
-        if (symbol.equals(s)) {
-          assertEquals(hash, h)
-        }
-      }
+        assertValidMethodIds(input, methodSymbols)
     }
-  }
+
+    void assertValidMethodIds(String input, Map<String, String> methodSymbols) {
+        TestHarnessClassLoader loader = new TestHarnessClassLoader(new EsAstTransformation(), CompilePhase.SEMANTIC_ANALYSIS)
+        def clazz = loader.parseClass(input)
+        for (Method method: clazz.methods) {
+            MethodHash methodHash = method.getAnnotation(MethodHash)
+            String hash = methodHash?.value()
+            String symbol = methodSymbols[method.name]
+            assertTrue((hash != null && symbol != null) || (hash == null && symbol == null))
+            if (hash == null) {
+                continue
+            }
+
+            for (Method m: clazz.methods) {
+                MethodHash mh = m.getAnnotation(MethodHash)
+                String h = mh?.value()
+                String s = methodSymbols[m.name]
+
+                if (hash.equals(h)) {
+                    assertEquals(symbol, s)
+                }
+
+                if (symbol.equals(s)) {
+                    assertEquals(hash, h)
+                }
+            }
+        }
+    }
 }
