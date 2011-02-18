@@ -12,12 +12,12 @@ class MethodHashCalculator extends CodeVisitorSupport {
     @Delegate
     AstDigest digest
 
-    String calculateMethodId(MethodNode methodNode, List<Class> skippedAnnotations) {
+    String calculateMethodId(MethodNode methodNode, List<String> skippedAnnotations) {
         this.digest = new AstDigest()
 
         Closure filterAnnotations = {AnnotationNode annotationNode ->
-            def typeClass = annotationNode.classNode.typeClass
-            return skippedAnnotations && !skippedAnnotations.contains(typeClass) && typeClass != MethodHash
+            String className = annotationNode?.classNode?.name
+            return skippedAnnotations && !skippedAnnotations.contains(className) && className != MethodHash.name
         }
 
         includeAnnotations(methodNode, filterAnnotations)

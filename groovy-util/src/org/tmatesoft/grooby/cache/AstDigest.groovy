@@ -40,15 +40,8 @@ class AstDigest {
         digest.update((byte) 0xff & (i >> 24))
     }
 
-    void includeClass(Class<?> klass) {
-        if (!klass) {
-            return
-        }
-        includeString(klass.name)
-    }
-
     void includeClassNode(ClassNode classNode) {
-        includeClass(classNode.typeClass)
+        includeString(classNode.name)
         includeBoolean(classNode == ClassNode.THIS)
         includeBoolean(classNode == ClassNode.SUPER)
     }

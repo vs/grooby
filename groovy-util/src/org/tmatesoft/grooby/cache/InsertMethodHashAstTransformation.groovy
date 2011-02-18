@@ -24,7 +24,7 @@ class InsertMethodHashAstTransformation implements ASTTransformation {
         boolean annotationFound = false
         ClassNode target = null
         Class targetMethodIndicator = null
-        List<Class> skippedAnnotations = null
+        List<String> skippedAnnotations = null
 
         astNodes.each {node ->
             if (!node) {
@@ -34,15 +34,19 @@ class InsertMethodHashAstTransformation implements ASTTransformation {
                 annotationFound |= true;
                 AnnotationNode annotationNode = node
 
-                ClassExpression methodTargetIndicatorExpression = annotationNode.getMember('applyToMethodsWith')
-                targetMethodIndicator = methodTargetIndicatorExpression?.type?.typeClass
+                Expression methodTargetIndicatorExpression = annotationNode.getMember('applyToMethodsWith')
+                if (methodTargetIndicatorExpression != null) {
+                    assert methodTargetIndicatorExpression instanceof ClassExpression
+                    assert methodTargetIndicatorExpression.type?.name != null
+                    targetMethodIndicator = loadClass(methodTargetIndicatorExpression.type)
+                }
 
                 Expression skipExpression = annotationNode.getMember('doNotIncludeToHash')
                 if (skipExpression != null) {
                     if (skipExpression instanceof ClassExpression) {
-                        skippedAnnotations = [skipExpression.type.typeClass]
+                        skippedAnnotations = [skipExpression.type.name]
                     } else if (skipExpression instanceof ListExpression) {
-                        skippedAnnotations = skipExpression.expressions.collect {Expression e -> e.type.typeClass}
+                        skippedAnnotations = skipExpression.expressions.collect {Expression e -> e.type.name}
                     }
                 }
             }
@@ -56,6 +60,14 @@ class InsertMethodHashAstTransformation implements ASTTransformation {
         }
     }
 
+    private Class loadClass(ClassNode classNode) {
+        try {
+            return Class.forName(classNode.name)
+        } catch (ClassNotFoundException cnfe) {
+            throw new RuntimeException("Failed to load class ${classNode.name}")
+        }
+    }
+
     // No test ids before we insert them
 
     void validateTestMethods(ClassNode classNode, Class targetMethodIndicator) {
@@ -65,13 +77,13 @@ class InsertMethodHashAstTransformation implements ASTTransformation {
         })
     }
 
-    void insertMethodIds(ClassNode classNode, Class targetMethodIndicator, List<Class> skippedAnnotations) {
+    void insertMethodIds(ClassNode classNode, Class targetMethodIndicator, List<String> skippedAnnotations) {
         iterateMethods(classNode, targetMethodIndicator, { MethodNode methodNode ->
             insertTestId(methodNode, skippedAnnotations)
         })
     }
 
-    String insertTestId(MethodNode methodNode, List<Class> skippedAnnotations) {
+    String insertTestId(MethodNode methodNode, List<String> skippedAnnotations) {
         MethodHashCalculator methodIdCalculator = new MethodHashCalculator()
         String methodId = methodIdCalculator.calculateMethodId(methodNode, skippedAnnotations)
 
