@@ -40,7 +40,7 @@ class EsAstTransformationVisitor extends ClassCodeVisitorSupport {
                 assert commandClassExpression instanceof ClassExpression
                 assert commandClassExpression.type?.name != null
                 try {
-                    commandClass = Class.forName(commandClassExpression.type?.name)
+                    commandClass = Class.forName(commandClassExpression.type.name, false, this.getClass().getClassLoader())
                 } catch (ClassNotFoundException cnfe) {
                     throw new RuntimeException("Failed to load command class $commandClassExpression.type?.name specified at $sourceUnit.name")
                 }

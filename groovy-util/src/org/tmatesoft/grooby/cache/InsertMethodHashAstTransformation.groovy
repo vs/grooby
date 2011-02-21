@@ -62,7 +62,7 @@ class InsertMethodHashAstTransformation implements ASTTransformation {
 
     private Class loadClass(ClassNode classNode) {
         try {
-            return Class.forName(classNode.name)
+            return Class.forName(classNode.name, false, this.getClass().getClassLoader())
         } catch (ClassNotFoundException cnfe) {
             throw new RuntimeException("Failed to load class ${classNode.name}")
         }
