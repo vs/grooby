@@ -8,7 +8,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformationClass
 
 @Retention(RetentionPolicy.SOURCE)
 @Target([ElementType.TYPE, ElementType.METHOD])
-@GroovyASTTransformationClass(classes = [EsAstTransformation.class])
+@GroovyASTTransformationClass("org.tmatesoft.grooby.exec.EsAstTransformation")
 public @interface ExecuteString {
     Class<? extends IEsExecutableCommand> value() default EsExecutableCommand.class
 
